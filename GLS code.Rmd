@@ -1,0 +1,90 @@
+```{r}
+# run these codes AFTER running data cleaning code
+library(nlme)
+```
+
+
+```{r}
+data2020 <- data2020 %>%
+  group_by(dyadID) %>%
+  mutate(partnum2 = seq_along(ResponseId)) %>%
+  ungroup()
+
+#select(data2020, dyadID, partnum2) %>% View()
+```
+
+
+```{r}
+tempA <- data2020 %>%
+  mutate(partnum2 = ifelse(partnum2 == 1, "A", "P")) %>%
+  gather(variable, value, birthday:data2grbs) %>%
+  unite(var_gender, variable, partnum2) %>%
+  spread(var_gender, value)
+```
+
+```{r}
+tempB <- data2020 %>%
+  mutate(partnum2 = ifelse(partnum2 == 1, "P", "A")) %>%
+  gather(variable, value, birthday:data2grbs) %>%
+  unite(var_gender, variable, partnum2) %>%
+  spread(var_gender, value)
+
+data2020_pair <- bind_rows(tempA, tempB) %>%
+  arrange(dyadID) %>%
+  mutate(data2housework_A = as.numeric(data2housework_A),
+         data2grbs_A = as.numeric(data2grbs_A),
+         gender_A = as.numeric(gender_A),
+         data2grbs_P = as.numeric(data2grbs_P))
+```
+
+
+```{r}
+#these are all c, just the total effects
+pilotapim_stp1 <- gls(as.numeric(data2housework_A) ~ as.factor(gender_A),
+                 data = data2020_pair,
+                 correlation = corCompSymm(form=~1|dyadID),
+#                 weights = varIdent(form=~1|genderE_A),
+                 na.action = na.omit)
+
+summary(pilotapim_stp1)
+```
+
+```{r}
+pilotapim_stp2 <- gls(as.numeric(data2grbs_A) ~ as.factor(gender_A),
+                 data = data2020_pair,
+                 correlation = corCompSymm(form=~1|dyadID),
+#                 weights = varIdent(form=~1|genderE_A),
+                 na.action = na.omit)
+
+summary(pilotapim_stp2)
+```
+
+
+```{r}
+pilotapim_stp3 <- gls(as.numeric(data2housework_A) ~ as.factor(gender_A) + 
+                        as.numeric(data2grbs_A)*as.factor(gender_A) + 
+                        as.numeric(data2grbs_P)*as.factor(gender_A),
+                 data = data2020_pair,
+                 correlation = corCompSymm(form=~1|dyadID),
+#                 weights = varIdent(form=~1|genderE_A),
+                 na.action = na.omit)
+
+summary(pilotapim_stp3)
+```
+
+```{r}
+pilotapim_stp3_2int <- gls(as.numeric(data2housework_A) ~ as.factor(gender_A) + 
+                        as.numeric(data2grbs_A):as.factor(gender_A) + 
+                        as.numeric(data2grbs_P):as.factor(gender_A) -1,
+                 data = data2020_pair,
+                 correlation = corCompSymm(form=~1|dyadID),
+#                 weights = varIdent(form=~1|genderE_A),
+                 na.action = na.omit)
+
+summary(pilotapim_stp3_2int)
+```
+
+```{r}
+unique(data2020$dyadID)
+```
+
