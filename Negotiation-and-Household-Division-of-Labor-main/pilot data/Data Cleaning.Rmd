@@ -1,0 +1,505 @@
+
+```{r}
+library(readr)
+library(dplyr)
+library(psych)
+library(ggplot2)
+library(nlme)
+library(tidyverse)
+```
+
+
+```{r}
+library(mosaic)
+data2 <- read_csv("TeleCom_Dyad_premeasures.csv")
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_1 = case_when(grbs_1 == "Strongly disagree" ~ "1", 
+                             grbs_1 == "Somewhat disagree" ~ "2",
+                             grbs_1 == "Neither agree nor disagree" ~ "3",
+                             grbs_1 == "Somewhat agree" ~ "4",
+                             grbs_1 == "Strongly agree" ~ "5"),
+         grbs_1 = as.numeric(grbs_1))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_2 = case_when(grbs_2 == "Strongly disagree" ~ "1", 
+                             grbs_2 == "Somewhat disagree" ~ "2",
+                             grbs_2 == "Neither agree nor disagree" ~ "3",
+                             grbs_2 == "Somewhat agree" ~ "4",
+                             grbs_2 == "Strongly agree" ~ "5"),
+         grbs_2 = as.numeric(grbs_2),
+         grbs_2.r = case_when(grbs_2 == 1 ~ 5, 
+                             grbs_2 == 2 ~ 4,
+                             grbs_2 == 3 ~ 3,
+                             grbs_2 == 4 ~ 2,
+                             grbs_2 == 5 ~ 1))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_3 = case_when(grbs_3 == "Strongly disagree" ~ "1", 
+                             grbs_3 == "Somewhat disagree" ~ "2",
+                             grbs_3 == "Neither agree nor disagree" ~ "3",
+                             grbs_3 == "Somewhat agree" ~ "4",
+                             grbs_3 == "Strongly agree" ~ "5"),
+         grbs_3 = as.numeric(grbs_3),
+         grbs_3.r = case_when(grbs_3 == 1 ~ 5, 
+                             grbs_3 == 2 ~ 4,
+                             grbs_3 == 3 ~ 3,
+                             grbs_3 == 4 ~ 2,
+                             grbs_3 == 5 ~ 1))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_4 = case_when(grbs_4 == "Strongly disagree" ~ "5", 
+                             grbs_4 == "Somewhat disagree" ~ "4",
+                             grbs_4 == "Neither agree nor disagree" ~ "3",
+                             grbs_4 == "Somewhat agree" ~ "2",
+                             grbs_4 == "Strongly agree" ~ "1"),
+         grbs_4 = as.numeric(grbs_4),
+         grbs_4.r = case_when(grbs_4 == 1 ~ 5, 
+                             grbs_4 == 2 ~ 4,
+                             grbs_4 == 3 ~ 3,
+                             grbs_4 == 4 ~ 2,
+                             grbs_4 == 5 ~ 1))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_5 = case_when(grbs_5 == "Strongly disagree" ~ "5", 
+                             grbs_5 == "Somewhat disagree" ~ "4",
+                             grbs_5 == "Neither agree nor disagree" ~ "3",
+                             grbs_5 == "Somewhat agree" ~ "2",
+                             grbs_5 == "Strongly agree" ~ "1"),
+         grbs_5 = as.numeric(grbs_5),
+         grbs_5.r = case_when(grbs_5 == 1 ~ 5, 
+                             grbs_5 == 2 ~ 4,
+                             grbs_5 == 3 ~ 3,
+                             grbs_5 == 4 ~ 2,
+                             grbs_5 == 5 ~ 1))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_6 = case_when(grbs_6 == "Strongly disagree" ~ "1", 
+                             grbs_6 == "Somewhat disagree" ~ "2",
+                             grbs_6 == "Neither agree nor disagree" ~ "3",
+                             grbs_6 == "Somewhat agree" ~ "4",
+                             grbs_6 == "Strongly agree" ~ "5"),
+         grbs_6 = as.numeric(grbs_6))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_7 = case_when(grbs_7 == "Strongly disagree" ~ "1", 
+                             grbs_7 == "Somewhat disagree" ~ "2",
+                             grbs_7 == "Neither agree nor disagree" ~ "3",
+                             grbs_7 == "Somewhat agree" ~ "4",
+                             grbs_7 == "Strongly agree" ~ "5"),
+         grbs_7 = as.numeric(grbs_7),
+         grbs_7.r = case_when(grbs_7 == 1 ~ 5, 
+                             grbs_7 == 2 ~ 4,
+                             grbs_7 == 3 ~ 3,
+                             grbs_7 == 4 ~ 2,
+                             grbs_7 == 5 ~ 1))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_8 = case_when(grbs_8 == "Strongly disagree" ~ "1", 
+                             grbs_8 == "Somewhat disagree" ~ "2",
+                             grbs_8 == "Neither agree nor disagree" ~ "3",
+                             grbs_8 == "Somewhat agree" ~ "4",
+                             grbs_8 == "Strongly agree" ~ "5"),
+         grbs_8 = as.numeric(grbs_8))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_9 = case_when(grbs_9 == "Strongly disagree" ~ "1", 
+                             grbs_9 == "Somewhat disagree" ~ "2",
+                             grbs_9 == "Neither agree nor disagree" ~ "3",
+                             grbs_9 == "Somewhat agree" ~ "4",
+                             grbs_9 == "Strongly agree" ~ "5"),
+         grbs_9 = as.numeric(grbs_9),
+         grbs_9.r = case_when(grbs_9 == 1 ~ 5, 
+                             grbs_9 == 2 ~ 4,
+                             grbs_9 == 3 ~ 3,
+                             grbs_9 == 4 ~ 2,
+                             grbs_9 == 5 ~ 1))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_10 = case_when(grbs_10 == "Strongly disagree" ~ "1", 
+                             grbs_10 == "Somewhat disagree" ~ "2",
+                             grbs_10 == "Neither agree nor disagree" ~ "3",
+                             grbs_10 == "Somewhat agree" ~ "4",
+                             grbs_10 == "Strongly agree" ~ "5"),
+         grbs_10 = as.numeric(grbs_10),
+         grbs_10.r = case_when(grbs_10 == 1 ~ 5,
+                               grbs_10 == 2~ 4,
+                             grbs_10 == 3 ~ 3,
+                             grbs_10 == 4 ~ 2,
+                             grbs_10 == 5 ~ 1))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_11 = case_when(grbs_11 == "Strongly disagree" ~ "1", 
+                             grbs_11 == "Somewhat disagree" ~ "2",
+                             grbs_11 == "Neither agree nor disagree" ~ "3",
+                             grbs_11 == "Somewhat agree" ~ "4",
+                             grbs_11 == "Strongly agree" ~ "5"),
+         grbs_11 = as.numeric(grbs_11))
+```
+
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_12 = case_when(grbs_12 == "Strongly disagree" ~ "1", 
+                             grbs_12 == "Somewhat disagree" ~ "2",
+                             grbs_12 == "Neither agree nor disagree" ~ "3",
+                             grbs_12 == "Somewhat agree" ~ "4",
+                             grbs_12 == "Strongly agree" ~ "5"),
+         grbs_12 = as.numeric(grbs_12),
+         grbs_12.r = case_when(grbs_12 == 1 ~ 5, 
+                             grbs_12 == 2 ~ 4,
+                             grbs_12 == 3 ~ 3,
+                             grbs_12 == 4 ~ 2,
+                             grbs_12 == 5 ~ 1))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_13 = case_when(grbs_13 == "Strongly disagree" ~ "1", 
+                             grbs_13 == "Somewhat disagree" ~ "2",
+                             grbs_13 == "Neither agree nor disagree" ~ "3",
+                             grbs_13 == "Somewhat agree" ~ "4",
+                             grbs_13 == "Strongly agree" ~ "5"),
+         grbs_13 = as.numeric(grbs_13))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_14 = case_when(grbs_14 == "Strongly disagree" ~ "1", 
+                             grbs_14 == "Somewhat disagree" ~ "2",
+                             grbs_14 == "Neither agree nor disagree" ~ "3",
+                             grbs_14 == "Somewhat agree" ~ "4",
+                             grbs_14 == "Strongly agree" ~ "5"),
+         grbs_14 = as.numeric(grbs_14))
+```
+
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_15 = case_when(grbs_15 == "Strongly disagree" ~ "1", 
+                             grbs_15 == "Somewhat disagree" ~ "2",
+                             grbs_15 == "Neither agree nor disagree" ~ "3",
+                             grbs_15 == "Somewhat agree" ~ "4",
+                             grbs_15 == "Strongly agree" ~ "5"),
+         grbs_15 = as.numeric(grbs_15))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_16 = case_when(grbs_16 == "Strongly disagree" ~ "1", 
+                             grbs_16 == "Somewhat disagree" ~ "2",
+                             grbs_16 == "Neither agree nor disagree" ~ "3",
+                             grbs_16 == "Somewhat agree" ~ "4",
+                             grbs_16 == "Strongly agree" ~ "5"),
+         grbs_16 = as.numeric(grbs_16))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_17 = case_when(grbs_17 == "Strongly disagree" ~ "1", 
+                             grbs_17 == "Somewhat disagree" ~ "2",
+                             grbs_17 == "Neither agree nor disagree" ~ "3",
+                             grbs_17 == "Somewhat agree" ~ "4",
+                             grbs_17 == "Strongly agree" ~ "5"),
+         grbs_17 = as.numeric(grbs_17),
+         grbs_17.r = case_when(grbs_17 == 1 ~ 5, 
+                             grbs_17 == 2 ~ 4,
+                             grbs_17 == 3 ~ 3,
+                             grbs_17 == 4 ~ 2,
+                             grbs_17 == 5 ~ 1))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_18 = case_when(grbs_18 == "Strongly disagree" ~ "1", 
+                             grbs_18 == "Somewhat disagree" ~ "2",
+                             grbs_18 == "Neither agree nor disagree" ~ "3",
+                             grbs_18 == "Somewhat agree" ~ "4",
+                             grbs_18 == "Strongly agree" ~ "5"),
+         grbs_18 = as.numeric(grbs_18))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_19 = case_when(grbs_19 == "Strongly disagree" ~ "1", 
+                             grbs_19 == "Somewhat disagree" ~ "2",
+                             grbs_19 == "Neither agree nor disagree" ~ "3",
+                             grbs_19 == "Somewhat agree" ~ "4",
+                             grbs_19 == "Strongly agree" ~ "5"),
+         grbs_19 = as.numeric(grbs_19))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(grbs_20 = case_when(grbs_20 == "Strongly disagree" ~ "1", 
+                             grbs_20 == "Somewhat disagree" ~ "2",
+                             grbs_20 == "Neither agree nor disagree" ~ "3",
+                             grbs_20 == "Somewhat agree" ~ "4",
+                             grbs_20 == "Strongly agree" ~ "5"),
+         grbs_20 = as.numeric(grbs_20))
+```
+
+
+
+```{r}
+psych::corr.test(select(data2, grbs_1, grbs_2.r, grbs_3.r, grbs_4.r, grbs_5.r, 
+                 grbs_6, grbs_7.r, grbs_8, grbs_9, grbs_10.r, grbs_11,
+                 grbs_12.r, grbs_13, grbs_14, grbs_15, grbs_16, grbs_17.r,
+                 grbs_18, grbs_19, grbs_20))$r
+
+
+```
+
+```{r}
+data2$data2grbs <- rowMeans(select(data2, grbs_1, grbs_2.r, grbs_3.r, grbs_4.r, grbs_5.r, 
+             grbs_6, grbs_7.r, grbs_8, grbs_9, grbs_10.r, grbs_11, grbs_12.r, grbs_13, grbs_14, 
+             grbs_15, grbs_16, grbs_17.r, grbs_18, grbs_19, 
+             grbs_20), na.rm = TRUE)
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_1 = case_when(housework_1 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_1 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_1 == "More likely me(60-80% me)" ~ "3",
+                             housework_1 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_1 = as.numeric(housework_1))
+```
+
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_2 = case_when(housework_2 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_2 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_2 == "More likely me(60-80% me)" ~ "3",
+                             housework_2 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_2 = as.numeric(housework_2))
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_3 = case_when(housework_3 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_3 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_3 == "More likely me(60-80% me)" ~ "3",
+                             housework_3 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_3 = as.numeric(housework_3))
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_4 = case_when(housework_4 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_4 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_4 == "More likely me(60-80% me)" ~ "3",
+                             housework_4 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_4 = as.numeric(housework_4))
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_5 = case_when(housework_5 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_5 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_5 == "More likely me(60-80% me)" ~ "3",
+                             housework_5 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_5 = as.numeric(housework_5))
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_6 = case_when(housework_6 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_6 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_6 == "More likely me(60-80% me)" ~ "3",
+                             housework_6 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_6 = as.numeric(housework_6),
+         housework_6.r = case_when(housework_6 == 1 ~ 5, 
+                             housework_6 == 2 ~ 4,
+                             housework_6 == 3 ~ 3,
+                             housework_6 == 4 ~ 2,
+                             housework_6 == 5 ~ 1))
+```
+
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_7 = case_when(housework_7 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_7 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_7 == "More likely me(60-80% me)" ~ "3",
+                             housework_7 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_7 = as.numeric(housework_7))
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_8 = case_when(housework_8 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_8 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_8 == "More likely me(60-80% me)" ~ "3",
+                             housework_8 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_8 = as.numeric(housework_8))
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_9 = case_when(housework_9 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_9 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_9 == "More likely me(60-80% me)" ~ "3",
+                             housework_9 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_9 = as.numeric(housework_9))
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_10 = case_when(housework_10 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_10 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_10 == "More likely me(60-80% me)" ~ "3",
+                             housework_10 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_10 = as.numeric(housework_10))
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_11 = case_when(housework_11 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_11 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_11 == "More likely me(60-80% me)" ~ "3",
+                             housework_11 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_11 = as.numeric(housework_11))
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_12 = case_when(housework_12 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_12 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_12 == "More likely me(60-80% me)" ~ "3",
+                             housework_12 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_12 = as.numeric(housework_12))
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_13 = case_when(housework_13 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_13 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_13 == "More likely me(60-80% me)" ~ "3",
+                             housework_13 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_13 = as.numeric(housework_13))
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(housework_14 = case_when(housework_14 == "More likely my partner(20-40% me)" ~ "1", 
+                             housework_14 == "Shared about equally(40-60% me)" ~ "2",
+                             housework_14 == "More likely me(60-80% me)" ~ "3",
+                             housework_14 == "Mostly or always me(80-100% me)" ~ "4"),
+         housework_14 = as.numeric(housework_14))
+```
+
+```{r}
+data2 <- data2 %>%
+  mutate(gender = ifelse(gender == "Woman", 1, 
+                         ifelse(gender == "Man", 2, NA)),
+         gender = as.numeric(gender))
+```
+         
+
+```{r}
+corr.test(select(data2, housework_1, housework_2, housework_3, housework_4, housework_5, 
+                 housework_6.r, housework_7, housework_8, housework_9, housework_10, housework_11,
+                 housework_12, housework_13, housework_14))$r
+```
+
+```{r}
+psych::alpha(select(data2, housework_1, housework_2, housework_3, housework_4, housework_5, 
+                 housework_6.r, housework_7, housework_8, housework_9, housework_10, housework_11,
+                 housework_12, housework_13, housework_14))
+```
+
+```{r}
+data2$data2housework <- rowMeans(select(data2, housework_1, housework_2, housework_3, housework_4, housework_5, 
+             housework_6, housework_7, housework_8, housework_9, housework_10, housework_11, housework_12,     
+             housework_13, housework_14), na.rm = TRUE)
+```
+
+```{r}
+data2020<- data2 %>%
+  select(dyadID, birthday, gender, race, religion, sexualor, ResponseId, data2housework, data2grbs, sexualor) %>%
+  drop_na()
+```
+
+```{r}
+summary(data2020$data2housework)
+```
+
+
+```{r}
+corr.test(select(data2020, data2housework, data2grbs))
+```
+
+```{r}
+data2020 %>%
+  group_by(gender) %>%
+  summarize(n = n ()) %>%
+  mutate(percent= n/sum(n))
+```
+
+```{r}
+data2020 %>%
+  group_by(race) %>%
+  summarize(n = n ()) %>%
+  mutate(percent= n/sum(n))
+```
+
+
+```{r}
+data2020 %>%
+  group_by(sexualor) %>%
+  summarize(n = n ()) %>%
+    mutate(percent= n/sum(n))
+```
+
+```{r}
+data2020 %>%
+  group_by(religion) %>%
+  summarize(n = n ()) %>%
+    mutate(percent= n/sum(n))
+```
+
